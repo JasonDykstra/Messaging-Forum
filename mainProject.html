@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AJAX Messaging Project</title>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+    #controlPanel {
+      background-color: #F0F000;
+      height: 100%;
+      float: left;
+      width: 20%;
+    }
+
+    #reportArea {
+      background-color: #00F0F0;
+      height: 100%;
+      width: 100%;
+
+    }
+    .panelTitle {
+      padding: 0;
+      margin: 0;
+      color: red;
+      text-align: center;
+    }
+
+    /*	NOTE: This, combined with the mods to the input[type=text] CSS, make the
+    fields of the form all line up on the right border (0px from the right)
+    */
+    #checkMessagesToPanel, #checkMessagesFromPanel, #newUserPanel, #newMessagePanel, #getUsersPanel {
+      border: 2px solid black;
+      position: relative;
+    }
+
+    /*	This, with the relative positioning of the panels (see above) is
+    one way to get the inputs to line up all nicely and flush against
+    the right hand side of the panels.
+    Position absolute positions elements relative to their nearest
+    positioned ancestor so this is putting items 0px from the right
+    hand side of the panel divs...lines them up nicely.
+    */
+    input[type=text] {
+      width: 100px;
+      position: absolute;
+      right: 0px;
+    }
+  </style>
+
+</head>
+
+
+
+<body>
+
+  <div id="controlPanel">
+
+    <div id="checkMessagesToPanel">
+      <p class="panelTitle">Check Messages To A User</p>
+      <form action="javascript:getMessagesTo();" method="get">
+        Username: <input type="text" name="user" id="getMessagesToUser">
+        <br>
+        <input type="submit" value="Click here to submit">
+      </form>
+    </div>
+
+    <div id="checkMessagesFromPanel">
+      <p class="panelTitle">Messages From Panel</p>
+      <form action="javascript:getMessagesFrom();" method="get">
+        Username: <input type="text" name="user" id="getMessagesFromUser">
+        <br>
+        <input type="submit" value="Click here to submit">
+      </form>
+    </div>
+
+    <div id="newMessagePanel">
+      <p class="panelTitle">New Message Panel</p>
+      <form action="javascript:sendMessage();" method="get">
+        Your username: <input type="text" name="sender" id="sendMessageSender">
+        <br>
+        To (username): <input type="text" name="to" id="sendMessageTo">
+        <br>
+        Subject: <input type="text" name="subject" id="sendMessageSubject">
+        <br>
+        Body: <input type="textarea" name="body" id="sendMessageBody">
+        <br>
+        <input type="submit" value="Click here to submit">
+      </form>
+    </div>
+
+    <div id="newUserPanel">
+      <p class="panelTitle">New User Panel</p>
+      <form action="javascript:addUser();" method="get">
+        Username: <input type="text" name="username" id="addUserUsername">
+        <br>
+        Password: <input type="text" name="password" id="addUserPassword">
+        <br>
+        Email: <input type="text" name="email" id="addUserEmail">
+        <br>
+        First Name: <input type="text" name="firstName" id="addUserFirstName">
+        <br>
+        Last Name: <input type="text" name="lastName" id="addUserLastName">
+        <br>
+        <input type="submit" value="Click here to submit">
+        <br>
+      </form>
+    </div>
+
+    <div id="getUsersPanel">
+      <p class="panelTitle">Get Users Panel</p>
+      <form action="javascript:getUsers();" method="get">
+        <input type="submit" value ="Click here to get Users">
+      </form>
+    </div>
+
+  </div>
+
+  <div id="reportArea">
+    This div is where the content from your AJAX requests will show up.
+  </div>
+
+
+
+  <script>
+
+    function processPage(responseText){
+      document.getElementById("reportArea").innerHTML = responseText;
+    }
+
+    function getMessagesTo(){
+      var url = 'getMessagesTo.php?user=' + document.getElementById("getMessagesToUser").value;
+      httpGetAsync(url, processPage);
+    }
+
+
+    function getMessagesFrom(){
+      var url = 'getMessagesFrom.php?user=' + document.getElementById("getMessagesFromUser").value;
+      httpGetAsync(url, processPage);
+    }
+
+    function getUsers(){
+      var url = 'getUsers.php';
+      httpGetAsync(url, processPage);
+    }
+
+    function addUser(){
+      var url = 'addUser.php?username=' + document.getElementById("addUserUsername").value + '&password=' + document.getElementById("addUserPassword").value + '&email=' + document.getElementById("addUserEmail").value + '&firstName=' + document.getElementById("addUserFirstName").value + '&lastName=' + document.getElementById("addUserLastName").value;
+      httpGetAsync(url, processPage);
+    }
+
+
+    function sendMessage(){
+      var url = 'sendMessage.php?sender=' + document.getElementById("sendMessageSender").value + '&to=' + document.getElementById("sendMessageTo").value + '&subject=' + document.getElementById("sendMessageSubject").value + '&body=' + document.getElementById("sendMessageBody").value;
+      httpGetAsync(url, processPage);
+    }
+
+    function httpGetAsync(theUrl, callbackFunctionWhenPageLoaded) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        callbackFunctionWhenPageLoaded(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", theUrl, true);
+      xmlHttp.send(null);
+    }
+
+  </script>
+
+</body>
+</html>
