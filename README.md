@@ -1,5 +1,5 @@
 # Messaging-Forum
-A local messaging website I created for a school project in 8th grade.
+A local messaging website I created for a school project in my senior year of highschool.
 
 While this messaging prototype only works locally, it was my first major project using HTML, CSS, JS, and PHP. Some other things I learned along the way were AJAX, and regular expressions. I made this at the end of senior year, 2019.
 
